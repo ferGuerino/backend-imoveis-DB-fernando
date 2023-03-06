@@ -1,5 +1,12 @@
 import "reflect-metadata";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from "typeorm";
 
 @Entity("users")
 class User {
@@ -9,14 +16,23 @@ class User {
   @Column({ length: 45 })
   name: string;
 
-  @Column({})
+  @Column({ length: 45, unique: true })
   email: string;
 
-  @Column({})
+  @Column({ type: "boolean" })
   admin: boolean;
 
-  @Column({})
+  @Column({ length: 120 })
   password: string;
+
+  @CreateDateColumn({ type: "date" })
+  createdAt: string | Date;
+
+  @UpdateDateColumn({ type: "date" })
+  updatedAt: string | Date;
+
+  @DeleteDateColumn({ type: "date", nullable: true })
+  deletedAt?: string | null | undefined | Date;
 }
 
 export { User };
