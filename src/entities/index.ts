@@ -1,9 +1,9 @@
 import { User } from "./users.entities";
-import { Address } from "../../rascunho/address.entities";
-import { Category } from "../../rascunho/category.entities";
-import { Schedule } from "../../rascunho/schedule.entities";
-import { RealEstate } from "../../rascunho/realEstate.entities";
+import { Address } from "./address.entities";
+import { Category } from "./category.entities";
+import { RealEstate } from "./realEstate.entities";
+import { Schedule } from "./schedule.entities";
 
-export { User };
+export { User, Address, Category, RealEstate, Schedule };
 
-//, Address, Category, Schedule, RealEstate
+//Schedule

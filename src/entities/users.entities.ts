@@ -19,8 +19,8 @@ class User {
   @Column({ length: 45, unique: true })
   email: string;
 
-  @Column({ type: "boolean" })
-  admin: boolean;
+  @Column({ type: "boolean", default: false })
+  admin: boolean = false;
 
   @Column({ length: 120 })
   password: string;

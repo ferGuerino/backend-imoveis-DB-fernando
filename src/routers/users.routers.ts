@@ -1,13 +1,27 @@
 import { Router } from "express";
-import { createUserController } from "../controllers/users.controllers";
-import ensureValidDataMiddleware from "../middlewares/ensureValidData.middlewares";
-import { createUserSchema } from "../schemas/users.schemas";
+import {
+  createUserController,
+  listUsersController,
+  softDeleteUserController,
+  updateUserController,
+} from "../controllers/users.controllers";
+import {
+  ensureValidDataMiddleware,
+  ensureValidIdMiddleware,
+  ensureValidTokenMiddleware,
+} from "../middlewares";
+import { createUserSchema, updateUserSchema } from "../schemas/users.schemas";
 
 const usersRoutes: Router = Router();
 
 usersRoutes.post("", ensureValidDataMiddleware(createUserSchema), createUserController);
-usersRoutes.get("");
-usersRoutes.patch("/:id");
-usersRoutes.delete("/:id");
+usersRoutes.get("", ensureValidTokenMiddleware, listUsersController);
+usersRoutes.patch(
+  "/:id",
+  ensureValidDataMiddleware(updateUserSchema),
+  ensureValidIdMiddleware,
+  updateUserController
+);
+usersRoutes.delete("/:id", ensureValidIdMiddleware, softDeleteUserController);
 
 export default usersRoutes;

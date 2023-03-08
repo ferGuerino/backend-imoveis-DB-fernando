@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { iUser } from "../interfaces/users.interfaces";
-import createUserService from "../services/users/createUser.services";
+import {
+  createUserService,
+  listUsersServices,
+  softDeleteUserService,
+  updateUserService,
+} from "../services/users";
 
 const createUserController = async (request: Request, response: Response) => {
   const userData: iUser = request.body;
@@ -8,4 +13,25 @@ const createUserController = async (request: Request, response: Response) => {
   return response.status(201).json(newUser);
 };
 
-export { createUserController };
+const listUsersController = async (request: Request, response: Response) => {
+  const users = await listUsersServices();
+
+  return response.json(users);
+};
+
+const softDeleteUserController = async (request: Request, response: Response) => {
+  const user = await softDeleteUserService(parseInt(request.params.id));
+
+  return response.json(user);
+};
+
+const updateUserController = async (request: Request, response: Response) => {
+  const userData = request.body;
+
+  const idUser = +request.params.id;
+
+  const updateUser = await updateUserService(userData, idUser);
+  return response.status(200).json(updateUser);
+};
+
+export { createUserController, listUsersController, softDeleteUserController, updateUserController };

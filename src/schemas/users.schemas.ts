@@ -1,10 +1,10 @@
-import { z } from "zod";
+import { nullable, optional, z } from "zod";
 import { hashSync } from "bcryptjs";
 
 const createUserSchema = z.object({
   name: z.string().min(3).max(45),
   email: z.string().email().min(5).max(45),
-  admin: z.boolean(),
+  admin: z.boolean().default(false),
   password: z
     .string()
     .min(3)
@@ -13,6 +13,8 @@ const createUserSchema = z.object({
       return hashSync(pass, 10);
     }),
 });
+
+const updateUserSchema = createUserSchema.partial();
 
 const returnCreateUserSchema = createUserSchema
   .extend({
@@ -23,4 +25,6 @@ const returnCreateUserSchema = createUserSchema
   })
   .omit({ password: true });
 
-export { createUserSchema, returnCreateUserSchema };
+const returnAllUsersSchema = returnCreateUserSchema.array();
+
+export { createUserSchema, returnCreateUserSchema, returnAllUsersSchema, updateUserSchema };

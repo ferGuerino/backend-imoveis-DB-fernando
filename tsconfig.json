@@ -12,6 +12,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["src", "rascunho/address.entities.ts"],
+  "include": ["src", "rascunho/address.entities.ts", "src/entities/schedule.entities.ts"],
   "exclude": ["node_modules"]
 }

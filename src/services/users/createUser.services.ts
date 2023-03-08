@@ -11,7 +11,7 @@ const createUserService = async (userData: iUser): Promise<iUserReturn> => {
     userData.admin = false;
   }
 
-  const user = userRepository.create(userData);
+  const user: User = userRepository.create(userData);
 
   await userRepository.save(user);
 
