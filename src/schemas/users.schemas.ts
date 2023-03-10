@@ -3,7 +3,7 @@ import { hashSync } from "bcryptjs";
 
 const createUserSchema = z.object({
   name: z.string().min(3).max(45),
-  email: z.string().email().min(5).max(45),
+  email: z.string().email().min(4).max(45),
   admin: z.boolean().default(false),
   password: z
     .string()
@@ -14,7 +14,20 @@ const createUserSchema = z.object({
     }),
 });
 
-const updateUserSchema = createUserSchema.partial();
+// const updateUserSchema = createUserSchema.partial();
+
+const updateUserSchema = z.object({
+  name: z.string().min(3).max(45).optional(),
+  email: z.string().email().min(4).max(45).optional(),
+  password: z
+    .string()
+    .min(3)
+    .max(20)
+    .transform((pass) => {
+      return hashSync(pass, 10);
+    })
+    .optional(),
+});
 
 const returnCreateUserSchema = createUserSchema
   .extend({

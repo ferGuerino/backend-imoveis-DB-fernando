@@ -12,6 +12,13 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["src", "rascunho/address.entities.ts", "src/entities/schedule.entities.ts"],
+  "include": [
+    "src",
+    "rascunho/address.entities.ts",
+    "src/entities/schedule.entities.ts",
+    "rascunho/1678115248310-createUser.ts",
+    "rascunho/1678371144912-fixRealEstateValue.ts",
+    "rescunho2/1678313549698-fixAddressStreet.ts"
+  ],
   "exclude": ["node_modules"]
 }

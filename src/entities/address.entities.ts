@@ -6,6 +6,9 @@ class Address {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
+  @Column({ type: "varchar", length: 45 })
+  street: string;
+
   @Column({ length: 8 })
   zipCode: string;
 

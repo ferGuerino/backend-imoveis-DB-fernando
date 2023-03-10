@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { returnCreateCategorySchema } from "./category.schemas";
 
 const createAddressSchema = z.object({
   street: z.string().max(45),
@@ -13,22 +14,25 @@ const returnCreateAddressSchema = createAddressSchema.extend({
 });
 
 const createRealEstateSchema = z.object({
-  sold: z.boolean().default(false),
-  value: z.number(),
-  size: z.number().int(),
+  value: z.string(),
+  size: z.number().int().positive(),
   address: createAddressSchema,
-  categoryId: z.number().optional(),
+  categoryId: z.number(),
 });
 
 const returnCreateRealEstateSchema = createRealEstateSchema.omit({ categoryId: true }).extend({
   id: z.number(),
   createdAt: z.string(),
   updatedAt: z.string(),
+  category: returnCreateCategorySchema,
 });
+
+const returnAllRealEstateSchema = returnCreateRealEstateSchema.array();
 
 export {
   createRealEstateSchema,
   returnCreateRealEstateSchema,
   createAddressSchema,
   returnCreateAddressSchema,
+  returnAllRealEstateSchema,
 };

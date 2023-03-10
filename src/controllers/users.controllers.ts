@@ -22,15 +22,16 @@ const listUsersController = async (request: Request, response: Response) => {
 const softDeleteUserController = async (request: Request, response: Response) => {
   const user = await softDeleteUserService(parseInt(request.params.id));
 
-  return response.json(user);
+  return response.status(204).json(user);
 };
 
 const updateUserController = async (request: Request, response: Response) => {
   const userData = request.body;
+  const token = request.headers.authorization;
 
   const idUser = +request.params.id;
 
-  const updateUser = await updateUserService(userData, idUser);
+  const updateUser = await updateUserService(userData, idUser, token);
   return response.status(200).json(updateUser);
 };
 

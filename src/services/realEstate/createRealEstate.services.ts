@@ -1,24 +1,39 @@
 import { Repository } from "typeorm";
 import { AppDataSource } from "../../data-source";
-import { Address } from "../../entities";
+import { Address, Category } from "../../entities";
 import { RealEstate } from "../../entities";
-import { iRealEstate, iRealEstateReturn } from "../../interfaces/realEstate.interfaces";
+import { iAddress, iRealEstate, iRealEstateReturn } from "../../interfaces/realEstate.interfaces";
 import {
+  createRealEstateSchema,
   returnCreateAddressSchema,
   returnCreateRealEstateSchema,
 } from "../../schemas/realEstate.schemas";
 
-const createRealEstateService = async (realEstateData: iRealEstate): Promise<iRealEstateReturn> => {
+const createRealEstateService = async (
+  realEstateData: iRealEstate,
+  addressData: iAddress,
+  idCategory: number
+): Promise<iRealEstateReturn> => {
   const realEstateRepository: Repository<RealEstate> = AppDataSource.getRepository(RealEstate);
   const addressRepository: Repository<Address> = AppDataSource.getRepository(Address);
+  const categoryRepository: Repository<Category> = AppDataSource.getRepository(Category);
 
-  const realEstate = realEstateRepository.create(realEstateData);
-  const address = addressRepository.create(realEstateData.address);
+  const newRealEstateData = createRealEstateSchema.parse(realEstateData);
+  const address = addressRepository.create(addressData);
+
+  const category = await categoryRepository.findOne({
+    where: {
+      id: idCategory,
+    },
+  });
+
+  const realEstate = realEstateRepository.create({
+    ...newRealEstateData,
+    category: category!,
+  });
 
   await addressRepository.save(address);
   await realEstateRepository.save(realEstate);
-
-  returnCreateAddressSchema.parse(address);
 
   const newRealEstate = returnCreateRealEstateSchema.parse(realEstate);
 
