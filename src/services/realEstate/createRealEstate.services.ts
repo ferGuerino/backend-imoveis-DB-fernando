@@ -21,6 +21,8 @@ const createRealEstateService = async (
   const newRealEstateData = createRealEstateSchema.parse(realEstateData);
   const address = addressRepository.create(addressData);
 
+  await addressRepository.save(address);
+
   const category = await categoryRepository.findOne({
     where: {
       id: idCategory,
@@ -30,9 +32,9 @@ const createRealEstateService = async (
   const realEstate = realEstateRepository.create({
     ...newRealEstateData,
     category: category!,
+    address: address,
   });
 
-  await addressRepository.save(address);
   await realEstateRepository.save(realEstate);
 
   const newRealEstate = returnCreateRealEstateSchema.parse(realEstate);

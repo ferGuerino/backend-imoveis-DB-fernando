@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { RealEstate } from "./realEstate.entities";
 
 @Entity("categories")
 class Category {
@@ -8,6 +9,9 @@ class Category {
 
   @Column({ length: 45, unique: true })
   name: string;
+
+  @OneToMany(() => RealEstate, (realEstate) => realEstate.category)
+  realEstate: RealEstate[];
 }
 
 export { Category };

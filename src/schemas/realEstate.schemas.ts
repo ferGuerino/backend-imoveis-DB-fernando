@@ -28,6 +28,11 @@ const returnCreateRealEstateSchema = createRealEstateSchema.omit({ categoryId: t
 });
 
 const returnAllRealEstateSchema = returnCreateRealEstateSchema.array();
+const returnAllRealEstateForCategory = returnCreateRealEstateSchema
+  .omit({
+    category: true,
+  })
+  .array();
 
 export {
   createRealEstateSchema,
@@ -35,4 +40,5 @@ export {
   createAddressSchema,
   returnCreateAddressSchema,
   returnAllRealEstateSchema,
+  returnAllRealEstateForCategory,
 };

@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { createCategoryController } from "../controllers/category.controllers";
+import {
+  createCategoryController,
+  listCategoriesController,
+  listRealEstateByCategoryController,
+} from "../controllers/category.controllers";
 import { ensureValidTokenMiddleware } from "../middlewares";
 import ensureCategoryNameAlreadyExists from "../middlewares/ensureCategoriesNameAlreadyExists.middlewares";
 import ensureUserIsAdminMiddleware from "../middlewares/ensureUserIsAdmin.middlewares";
@@ -13,6 +17,7 @@ categoriesRoutes.post(
   ensureCategoryNameAlreadyExists,
   createCategoryController
 );
-categoriesRoutes.get("/:id/realEstate");
+categoriesRoutes.get("", listCategoriesController);
+categoriesRoutes.get("/:id/realEstate", listRealEstateByCategoryController);
 
 export default categoriesRoutes;
