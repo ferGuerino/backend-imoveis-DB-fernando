@@ -14,7 +14,7 @@ const returnCreateAddressSchema = createAddressSchema.extend({
 });
 
 const createRealEstateSchema = z.object({
-  value: z.string(),
+  value: z.number().or(z.string()),
   size: z.number().int().positive(),
   address: createAddressSchema,
   categoryId: z.number(),

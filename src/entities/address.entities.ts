@@ -1,5 +1,6 @@
 import "reflect-metadata";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
+import { RealEstate } from "./realEstate.entities";
 
 @Entity("addresses")
 class Address {
@@ -20,6 +21,9 @@ class Address {
 
   @Column({ length: 2 })
   state: string;
+
+  @OneToOne(() => RealEstate, (realEstate) => realEstate.address)
+  realEstate: RealEstate;
 }
 
 export { Address };

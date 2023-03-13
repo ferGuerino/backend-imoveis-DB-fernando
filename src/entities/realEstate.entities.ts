@@ -34,16 +34,16 @@ class RealEstate {
   @UpdateDateColumn({ type: "date" })
   updatedAt: string | Date;
 
-  @OneToOne(() => Address)
+  @OneToOne(() => Address, (address) => address.realEstate)
   @JoinColumn()
   address: Address;
 
-  @ManyToOne(() => Category)
+  @ManyToOne(() => Category, (category) => category.realEstate)
   @JoinColumn()
   category: Category;
 
-  // @OneToMany(() => Schedule, (schedule) => schedule.realEstate)
-  // schedules: Schedule[];
+  @OneToMany(() => Schedule, (schedule) => schedule.realEstate)
+  schedules: Schedule[];
 }
 
 export { RealEstate };

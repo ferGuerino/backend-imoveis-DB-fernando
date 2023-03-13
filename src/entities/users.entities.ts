@@ -1,3 +1,4 @@
+import { getRounds, hashSync } from "bcryptjs";
 import "reflect-metadata";
 import {
   Entity,
@@ -6,7 +7,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
+  BeforeInsert,
+  BeforeUpdate,
 } from "typeorm";
+import { Schedule } from "./schedule.entities";
 
 @Entity("users")
 class User {
@@ -33,6 +38,18 @@ class User {
 
   @DeleteDateColumn({ type: "date", nullable: true })
   deletedAt?: string | null | undefined | Date;
+
+  @OneToMany(() => Schedule, (schedule) => schedule.user)
+  schedule: Schedule[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  hashPassword() {
+    const isEncripted = getRounds(this.password);
+    if (!isEncripted) {
+      this.password = hashSync(this.password, 10);
+    }
+  }
 }
 
 export { User };

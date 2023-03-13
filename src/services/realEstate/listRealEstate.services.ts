@@ -9,7 +9,6 @@ const listRealEstateService = async (): Promise<iManyRealEstateReturn | any> => 
 
   const listRealEstate: Array<RealEstate> = await realEstateRepository.find({
     relations: {
-      category: true,
       address: true,
     },
   });
