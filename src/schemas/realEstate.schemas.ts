@@ -10,7 +10,7 @@ const createAddressSchema = z.object({
 });
 
 const returnCreateAddressSchema = createAddressSchema.extend({
-  id: z.number(),
+  id: z.number().positive(),
 });
 
 const createRealEstateSchema = z.object({
@@ -20,12 +20,16 @@ const createRealEstateSchema = z.object({
   categoryId: z.number(),
 });
 
-const returnCreateRealEstateSchema = createRealEstateSchema.omit({ categoryId: true }).extend({
-  id: z.number(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  category: returnCreateCategorySchema,
-});
+const returnCreateRealEstateSchema = createRealEstateSchema
+  .extend({
+    id: z.number().positive(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    sold: z.boolean().default(false),
+    category: returnCreateCategorySchema,
+    address: returnCreateAddressSchema,
+  })
+  .omit({ categoryId: true });
 
 const returnAllRealEstateSchema = returnCreateRealEstateSchema.array();
 const returnAllRealEstateForCategory = returnCreateRealEstateSchema

@@ -12,7 +12,6 @@ const schedulesRoutes: Router = Router();
 schedulesRoutes.post(
   "",
   ensureValidTokenMiddleware,
-  ensureUserIsAdminMiddleware,
   ensureValidDataMiddleware(createScheduleSchema),
   createSchedulesController
 );

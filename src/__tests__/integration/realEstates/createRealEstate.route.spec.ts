@@ -33,7 +33,7 @@ describe("POST /realEstate", () => {
       status: 201,
       expectBody: { ...payload, category },
     };
-    console.log(expectResults.expectBody);
+
     expect(response.status).toBe(expectResults.status);
     expect(response.body).toEqual(expect.objectContaining(expectResults.expectBody));
   });

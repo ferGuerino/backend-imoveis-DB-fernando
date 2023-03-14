@@ -19,8 +19,6 @@ const createRealEstateService = async (
   const addressRepository: Repository<Address> = AppDataSource.getRepository(Address);
   const categoryRepository: Repository<Category> = AppDataSource.getRepository(Category);
 
-  const newRealEstateData = createRealEstateSchema.parse(realEstateData);
-
   const findAddresStreet = await addressRepository.findOne({
     where: {
       street: addressData.street,
@@ -38,8 +36,6 @@ const createRealEstateService = async (
 
   const address = addressRepository.create(addressData);
 
-  await addressRepository.save(address);
-
   const category = await categoryRepository.findOne({
     where: {
       id: idCategory,
@@ -49,9 +45,9 @@ const createRealEstateService = async (
   if (!category) {
     throw new AppError("Category not found", 404);
   }
-
-  const realEstate = realEstateRepository.create({
-    ...newRealEstateData,
+  await addressRepository.save(address);
+  const realEstate: RealEstate = realEstateRepository.create({
+    ...realEstateData,
     category: category!,
     address: address,
   });

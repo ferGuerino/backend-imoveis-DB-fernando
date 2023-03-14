@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 const createSchedulesService = async (
   scheduleData: iSchedules,
   token: string | undefined
-): Promise<any> => {
+): Promise<Schedule> => {
   const userRepository: Repository<User> = AppDataSource.getRepository(User);
   const scheduleRepository: Repository<Schedule> = AppDataSource.getRepository(Schedule);
   const realEstateRepository: Repository<RealEstate> = AppDataSource.getRepository(RealEstate);
@@ -40,13 +40,32 @@ const createSchedulesService = async (
     throw new AppError("RealEstate not found", 404);
   }
 
-  const findSchedule = await scheduleRepository.findOne({
-    where: {
-      date: scheduleData.date,
-      hour: scheduleData.hour,
-    },
-  });
+  const findSchedule = await realEstateRepository
+    .createQueryBuilder("real_estate")
+    .select(["real_estate", "schedules_users_properties"])
+    .innerJoin("real_estate.schedules", "schedules_users_properties")
+    .where("schedules_users_properties.date = :date", { date: scheduleData.date })
+    .andWhere("schedules_users_properties.hour = :hour", { hour: scheduleData.hour })
+    .andWhere("real_estate.id = :id", { id: scheduleData.realEstateId })
+    .getOne();
 
+  if (findSchedule) {
+    throw new AppError("Schedule to this real estate at this date and time already exists", 409);
+  }
+
+  const findUserSchedule = await realEstateRepository
+    .createQueryBuilder("real_estate")
+    .select(["real_estate", "schedules_users_properties", "users"])
+    .innerJoin("real_estate.schedules", "schedules_users_properties")
+    .innerJoin("schedules_users_properties.user", "users")
+    .where("schedules_users_properties.user.id = :id", { id: userTokenId })
+    .andWhere("schedules_users_properties.date = :date", { date: scheduleData.date })
+    .andWhere("schedules_users_properties.hour = :hour", { hour: scheduleData.hour })
+    .getOne();
+
+  if (findUserSchedule) {
+    throw new AppError("User schedule to this real estate at this date and time already exists", 409);
+  }
   const day = new Date(scheduleData.date);
   const weekDay = day.getDay();
 
